@@ -1,4 +1,5 @@
 from flask import Flask
+from logic import Logic_Handler
 
 app = Flask(__name__)
 
@@ -8,7 +9,12 @@ def hello_world():
 
 @app.route("/v1/weather/<city>")
 def get_weather(city):
-    pass
+    logic_handler = Logic_Handler()
+    try:
+        data = logic_handler.calculate_weather_data(city)
+        return data
+    except Exception as e:
+        return {'message': 'City not found'}, 404
 
 if __name__ == '__main__':
     app.run()
