@@ -14,7 +14,7 @@ def get_weather(city):
         data = logic_handler.calculate_weather_data(city)
         return data
     except Exception as e:
-        return {'message': 'City not found'}, 404
+        return {'message': 'An error occured'}, 400
 
 if __name__ == '__main__':
     app.run()

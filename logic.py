@@ -33,8 +33,8 @@ class Logic_Handler:
 
         return {
             'current': current_combined,
-            'history': history_combined,
-            # 'forecast': forcast,
+            # 'history': history_combined,
+            'forecast': forcast,
         }
 
     def combine_current_data(self, api1, api2):
@@ -58,4 +58,18 @@ class Logic_Handler:
         return result
 
     def get_forecast_from_previous_data(self, current_data, history_data):
-        pass
+        result = {}
+
+        for key in current_data:
+            # calculate recent change
+            recent = current_data[key] - history_data['past_hour'][key]
+            
+            # calculate historical change
+            historical = history_data['yesterday_curr'][key] - history_data['yesterday_prev'][key]
+
+            weighted_average = recent * 0.6 + historical * 0.4
+            result[key] = weighted_average + current_data[key]
+            if key == 'humidity' and result[key] > 100:
+                result[key] = 95
+
+        return result
