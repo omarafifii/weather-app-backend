@@ -24,6 +24,7 @@ class Logic_Handler:
             city, yesterday_date, today_date
         )
 
+        print(weatherbit_current)
         weatherbit_current_clean = self.weather_bit.extract_current_data(
             weatherbit_current
         )
