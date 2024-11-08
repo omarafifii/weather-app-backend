@@ -30,3 +30,32 @@ class WeatherBit(BaseWeatherAPI):
 
         response = request("GET", url=url, params=params)
         return response.json()
+
+    def extract_current_data(self, weather_data):
+        # convert windspeed from m/s to km/h
+        wind_speed = weather_data['data'][0]['wind_spd']
+        adjusted_wind_speed = wind_speed * 3.6
+        return {
+            'temp': weather_data['data'][0]['temp'],
+            'humidity': weather_data['data'][0]['rh'],
+            'wind_speed': adjusted_wind_speed,
+        }
+
+    def extract_previous_data(self, weather_data, time_now):
+         return {
+            'past_hour': {
+                'temp': weather_data['data'][-1]['temp'],
+                'humidity': weather_data['data'][-1]['rh'],
+                'wind_speed': weather_data['data'][-1]['wind_spd']*3.6,
+            },
+            'yesterday_prev': {
+                'temp': weather_data['data'][-23]['temp'],
+                'humidity': weather_data['data'][-23]['rh'],
+                'wind_speed': weather_data['data'][-23]['wind_spd']*3.6,
+            },
+            'yesterday_curr': {
+                'temp': weather_data['data'][-24]['temp'],
+                'humidity': weather_data['data'][-24]['rh'],
+                'wind_speed': weather_data['data'][-24]['wind_spd']*3.6,
+            }
+        }
